@@ -48,28 +48,3 @@ a:active {
     text-decoration: none;
     color: #cccccc;
 }
-
-body {
-	background: linear-gradient(230deg, #00274c, #203c43, #807929);
-	background-size: 500% 500%;
-
-	-webkit-animation: Grad 40s ease infinite;
-	-moz-animation: Grad 40s ease infinite;
-	animation: Grad 40s ease infinite;
-}
-
-@-webkit-keyframes Grad {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-@-moz-keyframes Grad {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-@keyframes Grad { 
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
