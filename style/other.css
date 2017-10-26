@@ -31,12 +31,16 @@ hr {
     border-bottom: 1px solid #ffffff;
 }
 
+ul {
+    color: #ffffff;
+}
+
 a {
-    color: white;
+    color: #ffffff;
 }
 
 a:visited {
-    color: white;
+    color: #ffffff;
 }
 
 a:hover {

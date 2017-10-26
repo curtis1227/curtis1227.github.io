@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /.git/
+Disallow: /scripts/
+Disallow: /style/
+Disallow: todo.html
