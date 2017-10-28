@@ -43,7 +43,7 @@ function updateDatabase(){
 		//if task wasn't deleted
 		if(tasks[i].id != -1){
 			console.log("updating task id " + tasks[i].id + " with new index " + index);
-			database.ref('/todo/list/' + index).set({
+			database.ref('/todo/' + user.uid + '/list/' + index).set({
 			    time: tasks[i].time,
 			    place: tasks[i].place,
 			    task: tasks[i].task
@@ -53,18 +53,14 @@ function updateDatabase(){
 		}
 	}
 	//update database size
-	database.ref('/todo/size').set(index);
-	// for(var i = index; i < tasks.length; i++){
-	// 	console.log("removing out of scope index " + i);
-	// 	database.ref('/todo/list/' + i).remove();
-	// }
+	database.ref('/todo/' + user.uid + '/size').set(index);
 }
 
 function loadTask(i){
 	console.log("loading task " + i);
 	//console.log("current tasks.length: " + tasks.length);
 	//Fill task[i]
-	database.ref('/todo/list/' + i).once('value').then(function(item) {
+	database.ref('/todo/' + user.uid + '/list/' + i).once('value').then(function(item) {
 		tasks[i] = new Task(i, item.val().time, item.val().place, item.val().task);
 	}).then(function(){
 		//Create row
@@ -77,23 +73,15 @@ function loadTask(i){
 
 //Fill tasks with tasks from database
 function loadTasks(){
-	database.ref('/todo/size').once('value').then(function(todo_size) {
-		tasks.length = todo_size.val();
+	database.ref('/todo/' + user.uid + '/size').once('value').then(function(todo_size) {
+		if(todo_size.val()) tasks.length = todo_size.val();
 		if(tasks.length > 0) loadTask(0);
 		//NOTHING AFTER loadTask
 	});
 }
 
 ////INITIALIZE CODE////
-// //Overlay before loading
-// $("body").prepend("<div class=\"overlay\"></div>");
-// $(".overlay").css({
-//     "position": "absolute", 
-//     "width": $(document).width(), 
-//     "height": $(document).height(),
-//     "z-index": 99999, 
-// });
-
+//Get redirect
 firebase.auth().getRedirectResult().then(function(result) {
   if (result.credential) {
     token = result.credential.accessToken;
@@ -115,14 +103,8 @@ firebase.auth().getRedirectResult().then(function(result) {
 		// User is signed in.
 		var displayName = user.displayName;
 		var email = user.email;
-		var emailVerified = user.emailVerified;
-		var photoURL = user.photoURL;
-		var isAnonymous = user.isAnonymous;
 		var uid = user.uid;
-		var providerData = user.providerData;
 		console.log(displayName + email + uid);
-		//Remove overlay
-		//$(".overlay").remove();
 	} else {
 		// User is signed out.
 		//Sign in with redirect
