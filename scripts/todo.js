@@ -1,5 +1,8 @@
 console.log("todo.js loaded");
 var database = firebase.database();
+var provider = new firebase.auth.GoogleAuthProvider();
+var token;
+var user;
 var tasks = [];
 //Get table from todo.html
 todotb = $("#todo_table");
@@ -51,6 +54,10 @@ function updateDatabase(){
 	}
 	//update database size
 	database.ref('/todo/size').set(index);
+	// for(var i = index; i < tasks.length; i++){
+	// 	console.log("removing out of scope index " + i);
+	// 	database.ref('/todo/list/' + i).remove();
+	// }
 }
 
 function loadTask(i){
@@ -69,10 +76,34 @@ function loadTask(i){
 }
 
 //Fill tasks with tasks from database
-database.ref('/todo/size').once('value').then(function(todo_size) {
-	tasks.length = todo_size.val();
-	if(tasks.length > 0) loadTask(0);
-	//NOTHING AFTER loadTask
+function loadTasks(){
+	database.ref('/todo/size').once('value').then(function(todo_size) {
+		tasks.length = todo_size.val();
+		if(tasks.length > 0) loadTask(0);
+		//NOTHING AFTER loadTask
+	});
+}
+
+////INITIALIZE CODE////
+//Overlay before loading
+$("body").prepend("<div class=\"overlay\"></div>");
+$(".overlay").css({
+    "position": "absolute", 
+    "width": $(document).width(), 
+    "height": $(document).height(),
+    "z-index": 99999, 
+});
+//Sign in with redirect
+firebase.auth().signInWithRedirect(provider);
+
+firebase.auth().getRedirectResult().then(function(result) {
+  if (result.credential) {
+    token = result.credential.accessToken;
+  }
+  // The signed-in user info.
+  user = result.user;
+  //Remove overlay
+  $(".overlay").remove();
 });
 
 //On new task creation
@@ -88,4 +119,15 @@ $("#input_button").click(function() {
 	} else {
 		alert("Invalid input");
 	}
+});
+
+//On deletion
+todotb.on('click', 'input[data-id]', function(){
+	console.log("delete detected");
+	//"Remove" from tasks
+	tasks[$(this).attr("data-id")].id = -1;
+	//Update database
+	updateDatabase();
+	//Delete row
+	$(this).parents("tr:first")[0].remove();
 });
