@@ -148,5 +148,11 @@ todotb.on('click', 'input[data-id]', function(){
 
 //On sign out
 $("#sign_out_button").click(function() {
-	firebase.auth().signOut();
+	firebase.auth().signOut().then(function() {
+	  // Sign-out successful.
+	  console.log("sign out successful");
+	}).catch(function(error) {
+	  // An error happened.
+	  console.log(error.message);
+	});
 });
