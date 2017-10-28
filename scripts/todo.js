@@ -145,3 +145,8 @@ todotb.on('click', 'input[data-id]', function(){
 	//Delete row
 	$(this).parents("tr:first")[0].remove();
 });
+
+//On sign out
+$("#sign_out_button").click(function() {
+	firebase.auth().signOut();
+});
