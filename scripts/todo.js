@@ -85,16 +85,14 @@ function loadTasks(){
 }
 
 ////INITIALIZE CODE////
-//Overlay before loading
-$("body").prepend("<div class=\"overlay\"></div>");
-$(".overlay").css({
-    "position": "absolute", 
-    "width": $(document).width(), 
-    "height": $(document).height(),
-    "z-index": 99999, 
-});
-//Sign in with redirect
-firebase.auth().signInWithRedirect(provider);
+// //Overlay before loading
+// $("body").prepend("<div class=\"overlay\"></div>");
+// $(".overlay").css({
+//     "position": "absolute", 
+//     "width": $(document).width(), 
+//     "height": $(document).height(),
+//     "z-index": 99999, 
+// });
 
 firebase.auth().getRedirectResult().then(function(result) {
   if (result.credential) {
@@ -102,9 +100,24 @@ firebase.auth().getRedirectResult().then(function(result) {
   }
   // The signed-in user info.
   user = result.user;
-  //Remove overlay
-  $(".overlay").remove();
 });
+
+if (user) {
+	// User is signed in.
+	var displayName = user.displayName;
+	var email = user.email;
+	var emailVerified = user.emailVerified;
+	var photoURL = user.photoURL;
+	var isAnonymous = user.isAnonymous;
+	var uid = user.uid;
+	var providerData = user.providerData;
+	//Remove overlay
+	//$(".overlay").remove();
+} else {
+	// User is signed out.
+	//Sign in with redirect
+	firebase.auth().signInWithRedirect(provider);
+}
 
 //On new task creation
 $("#input_button").click(function() {
