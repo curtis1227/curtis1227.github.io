@@ -100,24 +100,24 @@ firebase.auth().getRedirectResult().then(function(result) {
   }
   // The signed-in user info.
   user = result.user;
+}).then(function(){
+	if (user) {
+		// User is signed in.
+		var displayName = user.displayName;
+		var email = user.email;
+		var emailVerified = user.emailVerified;
+		var photoURL = user.photoURL;
+		var isAnonymous = user.isAnonymous;
+		var uid = user.uid;
+		var providerData = user.providerData;
+		//Remove overlay
+		//$(".overlay").remove();
+	} else {
+		// User is signed out.
+		//Sign in with redirect
+		firebase.auth().signInWithRedirect(provider);
+	}
 });
-
-if (user) {
-	// User is signed in.
-	var displayName = user.displayName;
-	var email = user.email;
-	var emailVerified = user.emailVerified;
-	var photoURL = user.photoURL;
-	var isAnonymous = user.isAnonymous;
-	var uid = user.uid;
-	var providerData = user.providerData;
-	//Remove overlay
-	//$(".overlay").remove();
-} else {
-	// User is signed out.
-	//Sign in with redirect
-	firebase.auth().signInWithRedirect(provider);
-}
 
 //On new task creation
 $("#input_button").click(function() {
