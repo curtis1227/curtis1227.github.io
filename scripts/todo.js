@@ -74,7 +74,10 @@ function loadTask(i){
 //Fill tasks with tasks from database
 function loadTasks(){
 	database.ref('/todo/' + user.uid + '/size').once('value').then(function(todo_size) {
-		if(todo_size.val()) tasks.length = todo_size.val();
+		console.log(todo_size.val());
+		if(todo_size.val()) {
+			tasks.length = todo_size.val();
+		}
 		if(tasks.length > 0) loadTask(0);
 		//NOTHING AFTER loadTask
 	});
