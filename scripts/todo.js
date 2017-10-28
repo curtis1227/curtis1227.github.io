@@ -103,6 +103,7 @@ firebase.auth().getRedirectResult().then(function(result) {
 }).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
+  console.log(errorCode);
   var errorMessage = error.message;
   console.log(errorMessage);
   // The email of the user's account used.
@@ -119,6 +120,7 @@ firebase.auth().getRedirectResult().then(function(result) {
 		var isAnonymous = user.isAnonymous;
 		var uid = user.uid;
 		var providerData = user.providerData;
+		console.log(displayName + email + uid);
 		//Remove overlay
 		//$(".overlay").remove();
 	} else {
