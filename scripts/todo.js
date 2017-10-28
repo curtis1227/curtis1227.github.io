@@ -105,6 +105,8 @@ firebase.auth().getRedirectResult().then(function(result) {
 		var email = user.email;
 		var uid = user.uid;
 		console.log(displayName + email + uid);
+		//Load tasks
+		loadTasks();
 	} else {
 		// User is signed out.
 		//Sign in with redirect
