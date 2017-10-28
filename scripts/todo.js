@@ -101,8 +101,11 @@ firebase.auth().getRedirectResult().then(function(result) {
   var email = error.email;
   // The firebase.auth.AuthCredential type that was used.
   var credential = error.credential;
-}).then(function(){
-	if (user) {
+});
+
+firebase.auth().onAuthStateChanged(function(temp_user) {
+	if (temp_user) {
+		user = temp_user;
 		// User is signed in.
 		var displayName = user.displayName;
 		var email = user.email;
