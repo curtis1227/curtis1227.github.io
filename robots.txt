@@ -3,3 +3,4 @@ Disallow: /.git/
 Disallow: /scripts/
 Disallow: /style/
 Disallow: todo.html
+Disallow: quiet.html
