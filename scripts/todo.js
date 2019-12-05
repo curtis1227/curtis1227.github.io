@@ -8,7 +8,7 @@ var tasks = [];
 todotb = $("#todo_table");
 class Task {
   constructor(id, time, place, task) {
-  	this.id = id;
+    this.id = id;
     this.time = time;
     this.place = place;
     this.task = task;
@@ -20,67 +20,67 @@ function isBlank(str) {
 }
 //Checks input values for validity
 function checkInput(){
-	var valid = true;
-	if(isBlank($("#input_time").val())) valid = false;
-	if(isBlank($("#input_place").val())) valid = false;
-	if(isBlank($("#input_task").val())) valid = false;
-	return valid;
+  var valid = true;
+  if(isBlank($("#input_time").val())) valid = false;
+  if(isBlank($("#input_place").val())) valid = false;
+  if(isBlank($("#input_task").val())) valid = false;
+  return valid;
 }
 //Create a row for the todo table
 function createRow(task){
-	var row = $('<tr></tr>').appendTo(todotb);
-	$('<td></td>').attr({class: "animated fadeInUp"}).text(task.time).appendTo(row);
-	$('<td></td>').attr({class: "animated fadeInUp"}).text(task.place).appendTo(row);
-	$('<td></td>').attr({class: "animated fadeInUp"}).text(task.task).appendTo(row);
-	row.append("<td><input type='button' value='X' data-id=" + task.id + "></td>");
+  var row = $('<tr></tr>').appendTo(todotb);
+  $('<td></td>').attr({class: "animated fadeInUp"}).text(task.time).appendTo(row);
+  $('<td></td>').attr({class: "animated fadeInUp"}).text(task.place).appendTo(row);
+  $('<td></td>').attr({class: "animated fadeInUp"}).text(task.task).appendTo(row);
+  row.append("<td><input type='button' value='X' data-id=" + task.id + "></td>");
 }
 //Update database
 function updateDatabase(){
-	//index to put in database
-	var index = 0;
-	//iterate thru tasks
-	for(var i = 0; i < tasks.length; i++){
-		//if task wasn't deleted
-		if(tasks[i].id != -1){
-			console.log("updating task id " + tasks[i].id + " with new index " + index);
-			database.ref('/todo/' + user.uid + '/list/' + index).set({
-			    time: tasks[i].time,
-			    place: tasks[i].place,
-			    task: tasks[i].task
-			  });
-			//incre database index
-			index++;
-		}
-	}
-	//update database size
-	database.ref('/todo/' + user.uid + '/size').set(index);
+  //index to put in database
+  var index = 0;
+  //iterate thru tasks
+  for(var i = 0; i < tasks.length; i++){
+    //if task wasn't deleted
+    if(tasks[i].id != -1){
+      console.log("updating task id " + tasks[i].id + " with new index " + index);
+      database.ref('/todo/' + user.uid + '/list/' + index).set({
+          time: tasks[i].time,
+          place: tasks[i].place,
+          task: tasks[i].task
+        });
+      //incre database index
+      index++;
+    }
+  }
+  //update database size
+  database.ref('/todo/' + user.uid + '/size').set(index);
 }
 
 function loadTask(i){
-	console.log("loading task " + i);
-	//console.log("current tasks.length: " + tasks.length);
-	//Fill task[i]
-	database.ref('/todo/' + user.uid + '/list/' + i).once('value').then(function(item) {
-		tasks[i] = new Task(i, item.val().time, item.val().place, item.val().task);
-	}).then(function(){
-		//Create row
-		createRow(tasks[i]);
-		//Increment i and next load
-		i++;
-		if(i < tasks.length) loadTask(i);
-	});
+  console.log("loading task " + i);
+  //console.log("current tasks.length: " + tasks.length);
+  //Fill task[i]
+  database.ref('/todo/' + user.uid + '/list/' + i).once('value').then(function(item) {
+    tasks[i] = new Task(i, item.val().time, item.val().place, item.val().task);
+  }).then(function(){
+    //Create row
+    createRow(tasks[i]);
+    //Increment i and next load
+    i++;
+    if(i < tasks.length) loadTask(i);
+  });
 }
 
 //Fill tasks with tasks from database
 function loadTasks(){
-	database.ref('/todo/' + user.uid + '/size').once('value').then(function(todo_size) {
-		console.log(todo_size.val());
-		if(todo_size.val()) {
-			tasks.length = todo_size.val();
-		}
-		if(tasks.length > 0) loadTask(0);
-		//NOTHING AFTER loadTask
-	});
+  database.ref('/todo/' + user.uid + '/size').once('value').then(function(todo_size) {
+    console.log(todo_size.val());
+    if(todo_size.val()) {
+      tasks.length = todo_size.val();
+    }
+    if(tasks.length > 0) loadTask(0);
+    //NOTHING AFTER loadTask
+  });
 }
 
 ////INITIALIZE CODE////
@@ -104,55 +104,55 @@ firebase.auth().getRedirectResult().then(function(result) {
 });
 
 firebase.auth().onAuthStateChanged(function(temp_user) {
-	if (temp_user) {
-		user = temp_user;
-		// User is signed in.
-		var displayName = user.displayName;
-		var email = user.email;
-		var uid = user.uid;
-		console.log(displayName + email + uid);
-		//Load tasks
-		loadTasks();
-	} else {
-		// User is signed out.
-		//Sign in with redirect
-		firebase.auth().signInWithRedirect(provider);
-	}
+  if (temp_user) {
+    user = temp_user;
+    // User is signed in.
+    var displayName = user.displayName;
+    var email = user.email;
+    var uid = user.uid;
+    console.log(displayName + email + uid);
+    //Load tasks
+    loadTasks();
+  } else {
+    // User is signed out.
+    //Sign in with redirect
+    firebase.auth().signInWithRedirect(provider);
+  }
 });
 
 //On new task creation
 $("#input_button").click(function() {
-	console.log("input detected");
-	if(checkInput()) {
-		//Add to tasks
-		tasks.push(new Task(tasks.length,$("#input_time").val(),$("#input_place").val(),$("#input_task").val()));
-		//Update database
-		updateDatabase();
-		//Create row
-		createRow(tasks[tasks.length-1]);
-	} else {
-		alert("Invalid input");
-	}
+  console.log("input detected");
+  if(checkInput()) {
+    //Add to tasks
+    tasks.push(new Task(tasks.length,$("#input_time").val(),$("#input_place").val(),$("#input_task").val()));
+    //Update database
+    updateDatabase();
+    //Create row
+    createRow(tasks[tasks.length-1]);
+  } else {
+    alert("Invalid input");
+  }
 });
 
 //On deletion
 todotb.on('click', 'input[data-id]', function(){
-	console.log("delete detected");
-	//"Remove" from tasks
-	tasks[$(this).attr("data-id")].id = -1;
-	//Update database
-	updateDatabase();
-	//Delete row
-	$(this).parents("tr:first")[0].remove();
+  console.log("delete detected");
+  //"Remove" from tasks
+  tasks[$(this).attr("data-id")].id = -1;
+  //Update database
+  updateDatabase();
+  //Delete row
+  $(this).parents("tr:first")[0].remove();
 });
 
 //On sign out
 $("#sign_out_button").click(function() {
-	firebase.auth().signOut().then(function() {
-	  // Sign-out successful.
-	  console.log("sign out successful");
-	}).catch(function(error) {
-	  // An error happened.
-	  console.log(error.message);
-	});
+  firebase.auth().signOut().then(function() {
+    // Sign-out successful.
+    console.log("sign out successful");
+  }).catch(function(error) {
+    // An error happened.
+    console.log(error.message);
+  });
 });
