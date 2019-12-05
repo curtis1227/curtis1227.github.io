@@ -1,12 +1,12 @@
 body {
   overflow: hidden;
 
-  background: linear-gradient(230deg, #00274c, #00274c, #b21f1f, #ffcb05);
+  background-image: linear-gradient(230deg, #00274c, #00274c, #b21f1f, #ffcb05);
   background-size: 300% 300%;
 
-  -webkit-animation: Grad 40s ease infinite;
-  -moz-animation: Grad 40s ease infinite;
-  animation: Grad 40s ease infinite;
+  -webkit-animation: Grad 30s linear infinite;
+  -moz-animation: Grad 30s linear infinite;
+  animation: Grad 30s linear infinite;
 }
 @-webkit-keyframes Grad {
     0%{background-position:0% 50%}
