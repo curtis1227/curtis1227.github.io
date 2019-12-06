@@ -1,11 +1,12 @@
 console.log("todo.js loaded");
-var database = firebase.database();
-var provider = new firebase.auth.GoogleAuthProvider();
+const database = firebase.database();
+const provider = new firebase.auth.GoogleAuthProvider();
 var token;
 var user;
 var tasks = [];
 //Get table from todo.html
-todotb = $("#todo_table");
+const $todotb = $("#todo_table");
+
 class Task {
   constructor(id, time, place, task) {
     this.id = id;
@@ -28,7 +29,7 @@ function checkInput(){
 }
 //Create a row for the todo table
 function createRow(task){
-  var row = $('<tr></tr>').appendTo(todotb);
+  var row = $('<tr></tr>').appendTo($todotb);
   $('<td></td>').attr({class: "animated fadeInUp"}).text(task.time).appendTo(row);
   $('<td></td>').attr({class: "animated fadeInUp"}).text(task.place).appendTo(row);
   $('<td></td>').attr({class: "animated fadeInUp"}).text(task.task).appendTo(row);
@@ -136,7 +137,7 @@ $("#input_button").click(function() {
 });
 
 //On deletion
-todotb.on('click', 'input[data-id]', function(){
+$todotb.on('click', 'input[data-id]', function(){
   console.log("delete detected");
   //"Remove" from tasks
   tasks[$(this).attr("data-id")].id = -1;
